@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: benchmark-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: benchmark
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - benchmark-network
+
+  postgresql:
+    image: postgres:16
+    container_name: benchmark-postgresql
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: benchmark
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    networks:
+      - benchmark-network
+
+volumes:
+  mongodb_data:
+  postgresql_data:
+
+networks:
+  benchmark-network:
+    driver: bridge
